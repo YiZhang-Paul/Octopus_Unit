@@ -1,0 +1,43 @@
+{
+    "name": "octopus_unit",
+    "version": "0.0.0",
+    "description": "a versatile unit testing utility tool",
+    "scripts": {
+        "build:dev": "webpack --config webpack/development.config.js --watch",
+        "start:dev": "npm run build:dev"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/YiZhang-Paul/Octopus_Unit.git"
+    },
+    "keywords": [
+        "unit",
+        "testing"
+    ],
+    "author": "Yi Zhang",
+    "bugs": {
+        "url": "https://github.com/YiZhang-Paul/Octopus_Unit/issues"
+    },
+    "homepage": "https://github.com/YiZhang-Paul/Octopus_Unit#readme",
+    "devDependencies": {
+        "@types/electron": "^1.6.10",
+        "@types/node": "^13.1.1",
+        "css-loader": "^3.4.0",
+        "electron": "^7.1.7",
+        "html-webpack-plugin": "^3.2.0",
+        "mini-css-extract-plugin": "^0.9.0",
+        "node-sass": "^4.13.0",
+        "sass-loader": "^8.0.0",
+        "ts-loader": "^6.2.1",
+        "typescript": "^3.7.4",
+        "vue-loader": "^15.8.3",
+        "vue-template-compiler": "^2.6.11",
+        "webpack": "^4.41.4",
+        "webpack-cli": "^3.3.10",
+        "webpack-electron-reload": "^1.0.0",
+        "webpack-merge": "^4.2.2"
+    },
+    "dependencies": {
+        "vue": "^2.6.11"
+    }
+}
