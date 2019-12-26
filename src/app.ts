@@ -1,3 +1,4 @@
+import './styles.scss';
 import Vue from 'vue';
 import RootView from './root-view.vue';
 
