@@ -55,6 +55,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+$max-sidebar-width: 20vw;
+
 .main-container {
     height: 100vh;
     display: flex;
@@ -64,10 +66,15 @@ export default Vue.extend({
 
 .directory-viewer {
     flex-grow: 1;
-    overflow: scroll;
+    max-width: $max-sidebar-width;
 }
 
 .file-viewer-placeholder, .file-viewer {
-    flex-grow: 5;
+    flex-grow: 7;
+    max-width: calc(100% - #{$max-sidebar-width});
+}
+
+.directory-viewer, .file-viewer {
+    overflow: scroll;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-<pre>{{ content }}</pre>
+<pre class="content">{{ content }}</pre>
 </template>
 
 <script lang="ts">
@@ -11,4 +11,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.content {
+    margin: 0;
+}
 </style>
