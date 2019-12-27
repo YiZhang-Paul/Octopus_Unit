@@ -5,7 +5,7 @@
         :key="item.name"
         :item="item"
         :location="location"
-        @file-open-start="$emit('file-open-start', $event)"
+        @item-selected="$emit('item-selected', $event)"
     />
 </div>
 </template>

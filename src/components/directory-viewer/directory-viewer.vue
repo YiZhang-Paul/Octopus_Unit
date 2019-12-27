@@ -2,7 +2,7 @@
 <directory-list
     :directory="directory"
     :location="''"
-    @file-open-start="onFileOpenStart"
+    @item-selected="onItemSelected"
 />
 </template>
 
@@ -28,9 +28,9 @@ export default Vue.extend({
         this.directory = await viewerService.listDirectoryRecursive(location);
     },
     methods: {
-        onFileOpenStart(payload: { path: string }): void {
+        onItemSelected(payload: { path: string }): void {
             payload.path = `${location}/${payload.path}`;
-            this.$emit('file-open-start', payload);
+            this.$emit('item-selected', payload);
         }
     }
 });

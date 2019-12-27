@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="item-container"
-        :class="{ active: isActive(item) }"
+        :class="{ active }"
         :style="styles"
         @click="onClick(false)"
         @dblclick="onClick(true)">{{ item.name }}
@@ -12,7 +12,7 @@
         <directory-list
             :directory="item.children"
             :location="currentLocation"
-            @file-open-start="$emit('file-open-start', $event)"
+            @item-selected="$emit('item-selected', $event)"
         />
     </div>
 </div>
@@ -20,35 +20,33 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapGetters, mapMutations } from 'vuex';
 
-import { directoryListName } from '../../store';
+import IDirectoryListItemSelection from '../../services/interfaces/directory-list-item-selection.interface';
 
 export default Vue.extend({
     props: ['item', 'location'],
     data: () => ({
-        expanded: false
+        expanded: false,
+        active: false
     }),
     beforeCreate(): void {
         if (this.$options.components) {
-            this.$options.components[directoryListName] = require('./directory-list.vue').default
+            this.$options.components['directory-list'] = require('./directory-list.vue').default
         }
     },
     methods: {
         onClick(isDoubleClick: boolean): void {
-            this.setActive(this.item);
-
-            if (!this.isDirectory) {
-                const payload = { isPreview: !isDoubleClick, path: this.currentLocation };
-                this.$emit('file-open-start', payload);
-            }
-            else {
+            if (this.isDirectory) {
                 this.expanded = !this.expanded;
             }
-        },
-        ...mapMutations({
-            setActive: `${directoryListName}/setActive`
-        })
+            const payload = {
+                source: this,
+                isPreview: !isDoubleClick,
+                isDirectory: this.isDirectory,
+                path: this.currentLocation
+            };
+            this.$emit('item-selected', payload as IDirectoryListItemSelection);
+        }
     },
     computed: {
         isDirectory(): boolean {
@@ -65,10 +63,7 @@ export default Vue.extend({
         },
         styles(): any {
             return ({ 'padding-left': `${this.level * 20}px` });
-        },
-        ...mapGetters({
-            isActive: `${directoryListName}/isActive`
-        })
+        }
     }
 });
 </script>
