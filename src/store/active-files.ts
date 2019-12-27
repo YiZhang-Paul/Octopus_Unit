@@ -1,9 +1,10 @@
 import { StoreOptions } from 'vuex';
 
+import IFileContent from '../services/interfaces/file-content.interface';
 import FileService from '../services/io/file-service';
 
 const fileService = new FileService();
-const activeFiles = new Set<string>();
+const activeFileLookup = new Set<string>();
 
 export default {
     namespaced: true,
@@ -12,29 +13,51 @@ export default {
         preview: null
     },
     mutations: {
-        open(state: any, payload: { path: string, content: Buffer }): void {
-            const { path } = payload;
-
-            if (!activeFiles.has(path)) {
-                activeFiles.add(path);
-                state.opened.push(payload);
-            }
+        openFile(state: any, payload: IFileContent): void {
+            activeFileLookup.add(payload.path);
+            state.opened.push(payload);
         },
-        preview(state: any, payload: { path: string, content: Buffer }): void {
+        closeFile(state: any, payload: IFileContent): void {
             const { path } = payload;
-
-            if (!activeFiles.has(path)) {
-                activeFiles.add(path);
-                state.preview = payload;
+            activeFileLookup.delete(path);
+            state.opened = state.opened.filter((_: IFileContent) => _.path !== path);
+        },
+        previewFile(state: any, payload: IFileContent): void {
+            activeFileLookup.add(payload.path);
+            state.preview = payload;
+        },
+        closePreview(state: any): void {
+            if (state.preview) {
+                activeFileLookup.delete(state.preview.path);
+                state.preview = null;
             }
         }
     },
     actions: {
-        async openFile(context: any, payload: { isPreview: boolean, path: string }): Promise<void> {
-            const { isPreview, path } = payload;
-            const mutation = isPreview ? 'preview' : 'open';
-            const content = await fileService.readFile(path);
-            context.commit(mutation, { path, content });
+        async openFile(context: any, payload: string): Promise<void> {
+            if (context.getters.isPreviewed(payload)) {
+                context.commit('closePreview');
+            }
+
+            if (!activeFileLookup.has(payload)) {
+                const content = await fileService.readFile(payload);
+                context.commit('openFile', { path: payload, content } as IFileContent);
+            }
+        },
+        async previewFile(context: any, payload: string): Promise<void> {
+            context.commit('closePreview');
+            const content = await fileService.readFile(payload);
+            context.commit('previewFile', { path: payload, content } as IFileContent);
+        }
+    },
+    getters: {
+        isPreviewed(state: any): Function {
+            return (path: string): boolean => state.preview && state.preview.path === path;
+        },
+        activeFiles(state: any): { opened: IFileContent[], preview: IFileContent } | null {
+            const { opened, preview } = state;
+
+            return opened.length || preview ? ({ opened, preview }) : null;
         }
     }
 } as StoreOptions<any>;

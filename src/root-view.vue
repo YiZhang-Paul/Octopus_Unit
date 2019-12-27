@@ -5,13 +5,20 @@
         @item-selected="onListItemSelected"
     />
 
-    <file-viewer class="file-viewer" />
+    <div class="file-viewer-placeholder" v-if="!activeFiles"></div>
+
+    <file-viewer
+        class="file-viewer"
+        v-if="activeFiles"
+        :opened="activeFiles.opened"
+        :preview="activeFiles.preview"
+    />
 </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import { activeFilesName, directoryListName } from './store';
 import IDirectoryListItemSelection from './services/interfaces/directory-list-item-selection.interface';
@@ -36,6 +43,11 @@ export default Vue.extend({
             replaceActiveItem: `${directoryListName}/replaceActiveItem`,
             openFile: `${activeFilesName}/openFile`
         })
+    },
+    computed: {
+        ...mapGetters({
+            activeFiles: `${activeFilesName}/activeFiles`
+        })
     }
 });
 </script>
@@ -51,11 +63,9 @@ export default Vue.extend({
 .directory-viewer {
     flex-grow: 1;
     overflow: scroll;
-    border: 1px solid red;
 }
 
-.file-viewer {
+.file-viewer-placeholder, .file-viewer {
     flex-grow: 5;
-    border: 1px solid yellow;
 }
 </style>
