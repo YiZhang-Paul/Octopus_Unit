@@ -4,7 +4,7 @@
         v-for="item in directory"
         :key="item.name"
         :item="item"
-        :level="level"
+        :location="location"
     />
 </div>
 </template>
@@ -15,7 +15,7 @@ import Vue from 'vue';
 import DirectoryListItem from './directory-list-item.vue';
 
 export default Vue.extend({
-    props: ['directory', 'level'],
+    props: ['directory', 'location'],
     components: {
         DirectoryListItem
     }

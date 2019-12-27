@@ -1,5 +1,5 @@
 <template>
-<directory-list :directory="directory" :level="0" />
+<directory-list :directory="directory" :location="''" />
 </template>
 
 <script lang="ts">
@@ -11,6 +11,7 @@ import DirectoryViewerService from '../../services/viewers/directory-viewer-serv
 import DirectoryList from './directory-list.vue';
 
 const viewerService = new DirectoryViewerService(new DirectoryService());
+const location = 'd:/electron';
 
 export default Vue.extend({
     data: () => ({
@@ -20,7 +21,7 @@ export default Vue.extend({
         DirectoryList
     },
     async beforeMount(): Promise<void> {
-        this.directory = await viewerService.listDirectoryRecursive('d:/electron');
+        this.directory = await viewerService.listDirectoryRecursive(location);
     }
 });
 </script>

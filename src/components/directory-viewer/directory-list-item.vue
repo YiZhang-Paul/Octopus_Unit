@@ -9,7 +9,7 @@
     </div>
 
     <div v-if="expanded">
-        <directory-list :directory="item.children" :level="level + 1" />
+        <directory-list :directory="item.children" :location="currentLocation" />
     </div>
 </div>
 </template>
@@ -21,7 +21,7 @@ import { mapGetters, mapMutations } from 'vuex';
 import { directoryListName } from '../../store';
 
 export default Vue.extend({
-    props: ['item', 'level'],
+    props: ['item', 'location'],
     data: () => ({
         expanded: false
     }),
@@ -48,6 +48,12 @@ export default Vue.extend({
         },
         expandIcon(): string {
             return this.expanded ? 'x' : '+';
+        },
+        currentLocation(): string {
+            return this.location ? `${this.location}/${this.item.name}` : this.item.name;
+        },
+        level(): number {
+            return (this.currentLocation.match(/\//g) || []).length;
         },
         styles(): any {
             return ({ 'padding-left': `${this.level * 20}px` });
