@@ -1,12 +1,20 @@
 <template>
 <div class="main-container">
-    <directory-viewer class="directory-viewer" @file-open-start="openFile($event)" />
+    <directory-viewer
+        class="directory-viewer"
+        @item-selected="onListItemSelected"
+    />
+
     <file-viewer class="file-viewer" />
 </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import { mapMutations } from 'vuex';
+
+import { directoryListName } from './store';
+import IDirectoryListItemSelection from './services/interfaces/directory-list-item-selection.interface';
 import DirectoryViewer from './components/directory-viewer/directory-viewer.vue';
 import FileViewer from './components/file-viewer/file-viewer.vue';
 
@@ -16,10 +24,15 @@ export default Vue.extend({
         FileViewer
     },
     methods: {
-        async openFile(payload: { isPreview: boolean, path: string }): Promise<void> {
+        async onListItemSelected(payload: IDirectoryListItemSelection): Promise<void> {
+            this.setActive(payload.source);
             console.log(payload.isPreview);
+            console.log(payload.isDirectory);
             console.log(payload.path);
-        }
+        },
+        ...mapMutations({
+            setActive: `${directoryListName}/setActive`
+        })
     }
 });
 </script>
