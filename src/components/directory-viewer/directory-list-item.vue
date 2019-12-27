@@ -7,7 +7,7 @@
     </div>
 
     <div v-if="isExpanded">
-        <directory-list :directory="item.children" />
+        <directory-list class="children" :directory="item.children" />
     </div>
 </div>
 </template>
@@ -55,5 +55,9 @@ export default Vue.extend({
     .active {
         background-color: rgb(40, 71, 209);
     }
+}
+
+.children {
+    margin-left: 20px;
 }
 </style>
