@@ -28,6 +28,7 @@ export default Vue.extend({
 
 .directory-viewer {
     flex-grow: 1;
+    overflow: scroll;
     border: 1px solid red;
 }
 
