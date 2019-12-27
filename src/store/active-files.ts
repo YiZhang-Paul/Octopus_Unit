@@ -17,10 +17,9 @@ export default {
             activeFileLookup.add(payload.path);
             state.opened.push(payload);
         },
-        closeFile(state: any, payload: IFileContent): void {
-            const { path } = payload;
-            activeFileLookup.delete(path);
-            state.opened = state.opened.filter((_: IFileContent) => _.path !== path);
+        closeFile(state: any, payload: string): void {
+            activeFileLookup.delete(payload);
+            state.opened = state.opened.filter((_: IFileContent) => _.path !== payload);
         },
         previewFile(state: any, payload: IFileContent): void {
             activeFileLookup.add(payload.path);
@@ -48,6 +47,10 @@ export default {
             context.commit('closePreview');
             const content = await fileService.readFile(payload);
             context.commit('previewFile', { path: payload, content } as IFileContent);
+        },
+        closeFile(context: any, payload: string): void {
+            const isPreviewed = context.getters.isPreviewed(payload);
+            context.commit(isPreviewed ? 'closePreview' : 'closeFile', payload);
         }
     },
     getters: {

@@ -6,12 +6,11 @@
     />
 
     <div class="file-viewer-placeholder" v-if="!activeFiles"></div>
-
-    <file-viewer
+    <file-viewer v-else
         class="file-viewer"
-        v-if="activeFiles"
         :opened="activeFiles.opened"
         :preview="activeFiles.preview"
+        @close-file="closeFile($event)"
     />
 </div>
 </template>
@@ -43,7 +42,8 @@ export default Vue.extend({
         ...mapActions({
             replaceActiveItem: `${directoryListName}/replaceActiveItem`,
             openFile: `${activeFilesName}/openFile`,
-            previewFile: `${activeFilesName}/previewFile`
+            previewFile: `${activeFilesName}/previewFile`,
+            closeFile: `${activeFilesName}/closeFile`
         })
     },
     computed: {
