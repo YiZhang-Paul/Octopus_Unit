@@ -1,5 +1,9 @@
 <template>
-<directory-list :directory="directory" :location="''" />
+<directory-list
+    :directory="directory"
+    :location="''"
+    @file-open-start="onFileOpenStart"
+/>
 </template>
 
 <script lang="ts">
@@ -22,6 +26,12 @@ export default Vue.extend({
     },
     async beforeMount(): Promise<void> {
         this.directory = await viewerService.listDirectoryRecursive(location);
+    },
+    methods: {
+        onFileOpenStart(payload: { path: string }): void {
+            payload.path = `${location}/${payload.path}`;
+            this.$emit('file-open-start', payload);
+        }
     }
 });
 </script>

@@ -9,7 +9,11 @@
     </div>
 
     <div v-if="expanded">
-        <directory-list :directory="item.children" :location="currentLocation" />
+        <directory-list
+            :directory="item.children"
+            :location="currentLocation"
+            @file-open-start="$emit('file-open-start', $event)"
+        />
     </div>
 </div>
 </template>
@@ -31,10 +35,14 @@ export default Vue.extend({
         }
     },
     methods: {
-        onClick(_isDoubleClick: boolean): void {
+        onClick(isDoubleClick: boolean): void {
             this.setActive(this.item);
 
-            if (this.isDirectory) {
+            if (!this.isDirectory) {
+                const payload = { isPreview: !isDoubleClick, path: this.currentLocation };
+                this.$emit('file-open-start', payload);
+            }
+            else {
                 this.expanded = !this.expanded;
             }
         },

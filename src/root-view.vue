@@ -1,6 +1,6 @@
 <template>
 <div class="main-container">
-    <directory-viewer class="directory-viewer" />
+    <directory-viewer class="directory-viewer" @file-open-start="openFile($event)" />
     <file-viewer class="file-viewer" />
 </div>
 </template>
@@ -14,6 +14,12 @@ export default Vue.extend({
     components: {
         DirectoryViewer,
         FileViewer
+    },
+    methods: {
+        async openFile(payload: { isPreview: boolean, path: string }): Promise<void> {
+            console.log(payload.isPreview);
+            console.log(payload.path);
+        }
     }
 });
 </script>

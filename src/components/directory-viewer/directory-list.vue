@@ -5,6 +5,7 @@
         :key="item.name"
         :item="item"
         :location="location"
+        @file-open-start="$emit('file-open-start', $event)"
     />
 </div>
 </template>
