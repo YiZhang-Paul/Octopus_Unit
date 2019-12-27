@@ -2,6 +2,8 @@
 <div class="main-container">
     <directory-viewer
         class="directory-viewer"
+        :baseUrl="baseUrl"
+        :directory="directory"
         @item-selected="onListItemSelected"
     />
 
@@ -25,9 +27,16 @@ import DirectoryViewer from './components/directory-viewer/directory-viewer.vue'
 import FileViewer from './components/file-viewer/file-viewer.vue';
 
 export default Vue.extend({
+    data: () => ({
+        baseUrl: 'd:/electron',
+        directory: []
+    }),
     components: {
         DirectoryViewer,
         FileViewer
+    },
+    async beforeMount(): Promise<void> {
+        this.directory = await this.loadItems(this.baseUrl);
     },
     methods: {
         async onListItemSelected(payload: IDirectoryListItemSelection): Promise<void> {
@@ -40,6 +49,7 @@ export default Vue.extend({
             }
         },
         ...mapActions({
+            loadItems: `${directoryListStoreName}/loadItems`,
             replaceActiveItem: `${directoryListStoreName}/replaceActiveItem`,
             openFile: `${activeFilesStoreName}/openFile`,
             previewFile: `${activeFilesStoreName}/previewFile`,
