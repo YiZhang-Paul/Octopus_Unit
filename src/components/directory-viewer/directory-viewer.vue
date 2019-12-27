@@ -1,5 +1,5 @@
 <template>
-<directory-list :directory="directory" />
+<directory-list :directory="directory" :level="0" />
 </template>
 
 <script lang="ts">

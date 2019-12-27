@@ -2,12 +2,13 @@
 <div>
     <div class="item-container"
         :class="{ active: isActive(item) }"
+        :style="styles"
         @click="onClick">{{ item.name }}
-        <span class="expand-icon" v-if="isDirectory">+</span>
+        <span class="expand-icon" v-if="isDirectory">{{ expandIcon }}</span>
     </div>
 
     <div v-if="isExpanded">
-        <directory-list class="children" :directory="item.children" />
+        <directory-list :directory="item.children" :level="level + 1" />
     </div>
 </div>
 </template>
@@ -17,7 +18,7 @@ import Vue from 'vue';
 import { mapGetters, mapMutations } from 'vuex';
 
 export default Vue.extend({
-    props: ['item'],
+    props: ['item', 'level'],
     data: () => ({
         selected: false
     }),
@@ -42,6 +43,12 @@ export default Vue.extend({
         isExpanded(): boolean {
             return this.isDirectory && this.selected;
         },
+        expandIcon(): string {
+            return this.isExpanded ? 'x' : '+';
+        },
+        styles(): any {
+            return ({ 'padding-left': `${(this.level - 1) * 10}px` });
+        },
         ...mapGetters({
             isActive: 'DirectoryList/isActive'
         })
@@ -63,9 +70,5 @@ export default Vue.extend({
 
 .active {
     background-color: rgb(40, 71, 209);
-}
-
-.children {
-    margin-left: 20px;
 }
 </style>
