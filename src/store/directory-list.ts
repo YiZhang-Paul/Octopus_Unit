@@ -6,12 +6,21 @@ export default {
         activeItem: null
     },
     mutations: {
-        setActive(state: any, payload: any): void {
-            if (state.activeItem) {
-                state.activeItem.active = false;
-            }
+        setActiveItem(state: any, payload: any): void {
             state.activeItem = payload;
             state.activeItem.active = true;
+        },
+        removeActiveItem(state: any): void {
+            if (state.activeItem) {
+                state.activeItem.active = false;
+                state.activeItem = null;
+            }
+        }
+    },
+    actions: {
+        replaceActiveItem(context: any, payload: any): void {
+            context.commit('removeActiveItem');
+            context.commit('setActiveItem', payload);
         }
     }
 } as StoreOptions<any>;

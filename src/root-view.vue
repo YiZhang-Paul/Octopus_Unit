@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapActions, mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
 
 import { activeFilesName, directoryListName } from './store';
 import IDirectoryListItemSelection from './services/interfaces/directory-list-item-selection.interface';
@@ -26,17 +26,15 @@ export default Vue.extend({
     methods: {
         async onListItemSelected(payload: IDirectoryListItemSelection): Promise<void> {
             const { source, isDirectory, isPreview, path } = payload;
-            this.setActive(source);
+            this.replaceActiveItem(source);
 
             if (!isDirectory) {
                 await this.openFile({ isPreview, path });
             }
         },
         ...mapActions({
+            replaceActiveItem: `${directoryListName}/replaceActiveItem`,
             openFile: `${activeFilesName}/openFile`
-        }),
-        ...mapMutations({
-            setActive: `${directoryListName}/setActive`
         })
     }
 });
