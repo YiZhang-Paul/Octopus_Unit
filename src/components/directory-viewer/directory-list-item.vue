@@ -3,11 +3,12 @@
     <div class="item-container"
         :class="{ active: isActive(item) }"
         :style="styles"
-        @click="onClick">{{ item.name }}
+        @click="onClick(false)"
+        @dblclick="onClick(true)">{{ item.name }}
         <span class="expand-icon" v-if="isDirectory">{{ expandIcon }}</span>
     </div>
 
-    <div v-if="isExpanded">
+    <div v-if="expanded">
         <directory-list :directory="item.children" :level="level + 1" />
     </div>
 </div>
@@ -20,7 +21,7 @@ import { mapGetters, mapMutations } from 'vuex';
 export default Vue.extend({
     props: ['item', 'level'],
     data: () => ({
-        selected: false
+        expanded: false
     }),
     beforeCreate(): void {
         if (this.$options.components) {
@@ -28,9 +29,12 @@ export default Vue.extend({
         }
     },
     methods: {
-        onClick(): void {
-            this.selected = !this.selected;
+        onClick(_isDoubleClick: boolean): void {
             this.setActive(this.item);
+
+            if (this.isDirectory) {
+                this.expanded = !this.expanded;
+            }
         },
         ...mapMutations({
             setActive: 'DirectoryList/setActive'
@@ -40,14 +44,11 @@ export default Vue.extend({
         isDirectory(): boolean {
             return !!this.item.children;
         },
-        isExpanded(): boolean {
-            return this.isDirectory && this.selected;
-        },
         expandIcon(): string {
-            return this.isExpanded ? 'x' : '+';
+            return this.expanded ? 'x' : '+';
         },
         styles(): any {
-            return ({ 'padding-left': `${(this.level - 1) * 10}px` });
+            return ({ 'padding-left': `${this.level * 20}px` });
         },
         ...mapGetters({
             isActive: 'DirectoryList/isActive'

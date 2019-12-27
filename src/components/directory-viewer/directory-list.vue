@@ -4,7 +4,7 @@
         v-for="item in directory"
         :key="item.name"
         :item="item"
-        :level="level + 1"
+        :level="level"
     />
 </div>
 </template>
