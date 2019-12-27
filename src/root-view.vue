@@ -19,7 +19,7 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 
-import { activeFilesName, directoryListName } from './store';
+import { activeFilesStoreName, directoryListStoreName } from './store';
 import IDirectoryListItemSelection from './services/interfaces/directory-list-item-selection.interface';
 import DirectoryViewer from './components/directory-viewer/directory-viewer.vue';
 import FileViewer from './components/file-viewer/file-viewer.vue';
@@ -40,15 +40,15 @@ export default Vue.extend({
             }
         },
         ...mapActions({
-            replaceActiveItem: `${directoryListName}/replaceActiveItem`,
-            openFile: `${activeFilesName}/openFile`,
-            previewFile: `${activeFilesName}/previewFile`,
-            closeFile: `${activeFilesName}/closeFile`
+            replaceActiveItem: `${directoryListStoreName}/replaceActiveItem`,
+            openFile: `${activeFilesStoreName}/openFile`,
+            previewFile: `${activeFilesStoreName}/previewFile`,
+            closeFile: `${activeFilesStoreName}/closeFile`
         })
     },
     computed: {
         ...mapGetters({
-            activeFiles: `${activeFilesName}/activeFiles`
+            activeFiles: `${activeFilesStoreName}/activeFiles`
         })
     }
 });
