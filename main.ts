@@ -14,8 +14,13 @@ function createWindow(): void {
     mainWindow.loadFile('index.html');
     mainWindow.maximize();
     mainWindow.setAlwaysOnTop(true, 'normal');
-    setTimeout(() => mainWindow.setAlwaysOnTop(false), 1000);
     mainWindow.on('closed', () => mainWindow = null);
+
+    setTimeout(() => {
+        if (mainWindow) {
+            mainWindow.setAlwaysOnTop(false);
+        }
+    }, 1000);
 }
 
 app.on('ready', createWindow);

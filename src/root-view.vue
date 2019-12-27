@@ -7,8 +7,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import DirectoryViewer from './components/directory-viewer/directory-viewer';
-import FileViewer from './components/file-viewer/file-viewer';
+import DirectoryViewer from './components/directory-viewer/directory-viewer.vue';
+import FileViewer from './components/file-viewer/file-viewer.vue';
 
 export default Vue.extend({
     components: {
