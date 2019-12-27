@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="item-container"
-        :class="{ active }"
+        :class="{ active: isActive(item) }"
         @click="onClick">{{ item.name }}
         <span class="expand-icon" v-if="isDirectory">+</span>
     </div>
@@ -14,11 +14,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default Vue.extend({
     props: ['item'],
     data: () => ({
-        active: false
+        selected: false
     }),
     beforeCreate(): void {
         if (this.$options.components) {
@@ -27,16 +28,23 @@ export default Vue.extend({
     },
     methods: {
         onClick(): void {
-            this.active = !this.active;
-        }
+            this.selected = !this.selected;
+            this.setActive(this.item);
+        },
+        ...mapMutations({
+            setActive: 'DirectoryList/setActive'
+        })
     },
     computed: {
         isDirectory(): boolean {
             return !!this.item.children;
         },
         isExpanded(): boolean {
-            return this.isDirectory && this.active;
-        }
+            return this.isDirectory && this.selected;
+        },
+        ...mapGetters({
+            isActive: 'DirectoryList/isActive'
+        })
     }
 });
 </script>
@@ -51,10 +59,10 @@ export default Vue.extend({
     .expand-icon {
         float: right;
     }
+}
 
-    .active {
-        background-color: rgb(40, 71, 209);
-    }
+.active {
+    background-color: rgb(40, 71, 209);
 }
 
 .children {
