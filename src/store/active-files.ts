@@ -1,5 +1,10 @@
 import { StoreOptions } from 'vuex';
 
+import FileService from '../services/io/file-service';
+
+const fileService = new FileService();
+const activeFiles = new Set<string>();
+
 export default {
     namespaced: true,
     state: {
@@ -7,17 +12,29 @@ export default {
         preview: null
     },
     mutations: {
-        open(state: any, payload: any): void {
-            state.opened.push(payload);
+        open(state: any, payload: { path: string, content: Buffer }): void {
+            const { path } = payload;
+
+            if (!activeFiles.has(path)) {
+                activeFiles.add(path);
+                state.opened.push(payload);
+            }
         },
-        preview(state: any, payload: any): void {
-            state.preview = payload;
+        preview(state: any, payload: { path: string, content: Buffer }): void {
+            const { path } = payload;
+
+            if (!activeFiles.has(path)) {
+                activeFiles.add(path);
+                state.preview = payload;
+            }
         }
     },
     actions: {
         async openFile(context: any, payload: { isPreview: boolean, path: string }): Promise<void> {
-            const mutation = payload.isPreview ? 'preview' : 'open';
-            context.commit(mutation, { path: payload.path });
+            const { isPreview, path } = payload;
+            const mutation = isPreview ? 'preview' : 'open';
+            const content = await fileService.readFile(path);
+            context.commit(mutation, { path, content });
         }
     }
 } as StoreOptions<any>;
