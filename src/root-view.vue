@@ -36,12 +36,14 @@ export default Vue.extend({
             this.replaceActiveItem(source);
 
             if (!isDirectory) {
-                await this.openFile({ isPreview, path });
+                const action = (isPreview ? this.previewFile : this.openFile);
+                await action.bind(this)(path);
             }
         },
         ...mapActions({
             replaceActiveItem: `${directoryListName}/replaceActiveItem`,
-            openFile: `${activeFilesName}/openFile`
+            openFile: `${activeFilesName}/openFile`,
+            previewFile: `${activeFilesName}/previewFile`
         })
     },
     computed: {
