@@ -18,6 +18,8 @@
 import Vue from 'vue';
 import { mapGetters, mapMutations } from 'vuex';
 
+import { directoryListName } from '../../store';
+
 export default Vue.extend({
     props: ['item', 'level'],
     data: () => ({
@@ -25,7 +27,7 @@ export default Vue.extend({
     }),
     beforeCreate(): void {
         if (this.$options.components) {
-            this.$options.components.DirectoryList = require('./directory-list.vue').default
+            this.$options.components[directoryListName] = require('./directory-list.vue').default
         }
     },
     methods: {
@@ -37,7 +39,7 @@ export default Vue.extend({
             }
         },
         ...mapMutations({
-            setActive: 'DirectoryList/setActive'
+            setActive: `${directoryListName}/setActive`
         })
     },
     computed: {
@@ -51,7 +53,7 @@ export default Vue.extend({
             return ({ 'padding-left': `${this.level * 20}px` });
         },
         ...mapGetters({
-            isActive: 'DirectoryList/isActive'
+            isActive: `${directoryListName}/isActive`
         })
     }
 });

@@ -5,8 +5,10 @@ import DirectoryList from './directory-list';
 
 Vue.use(Vuex);
 
+export const directoryListName = 'directoryList';
+
 export default new Vuex.Store({
     modules: {
-        DirectoryList
+        [directoryListName]: DirectoryList
     }
 });
