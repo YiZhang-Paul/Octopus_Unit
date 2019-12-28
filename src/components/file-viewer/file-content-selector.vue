@@ -1,6 +1,7 @@
 <template>
 <div class="main-container">
     <div class="selection-container"
+        :class="{ selected: isSelected(path) }"
         v-for="path in selections"
         :key="path"
         @click="$emit('selected', path)">
@@ -16,8 +17,11 @@
 import Vue from 'vue';
 
 export default Vue.extend({
-    props: ['selections', 'previewed'],
+    props: ['selections', 'previewed', 'selected'],
     methods: {
+        isSelected(path: string): boolean {
+            return this.selected === path;
+        },
         isPreviewed(path: string): boolean {
             return this.previewed === path;
         },
@@ -33,15 +37,19 @@ export default Vue.extend({
     display: flex;
     flex-flow: row nowrap;
     overflow-x: scroll;
-}
 
-.selection-container {
-    cursor: pointer;
-    min-width: 8vw;
-    border: 1px solid skyblue;
+    .selection-container {
+        cursor: pointer;
+        min-width: 8vw;
+        border: 1px solid skyblue;
 
-    .close-button {
-        float: right;
+        .close-button {
+            float: right;
+        }
+    }
+
+    .selected {
+        background-color: cornflowerblue;
     }
 }
 </style>

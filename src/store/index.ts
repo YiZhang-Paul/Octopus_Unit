@@ -9,7 +9,7 @@ Vue.use(Vuex);
 export const directoryFilesStoreName = 'directoryFilesStore';
 export const openedFilesStoreName = 'openedFilesStore';
 
-export default new Vuex.Store({
+export default new Vuex.Store<any>({
     modules: {
         [directoryFilesStoreName]: DirectoryFilesStore,
         [openedFilesStoreName]: OpenedFilesStore

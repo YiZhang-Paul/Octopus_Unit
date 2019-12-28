@@ -4,6 +4,7 @@
         class="selector-container"
         :selections="filePaths"
         :previewed = "previewedFilePath"
+        :selected="selected"
         @selected="$emit('selected', $event)"
         @close-file="$emit('close-file', $event)"
     />

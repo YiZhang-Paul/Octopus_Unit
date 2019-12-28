@@ -14,7 +14,7 @@
         :opened="openedFiles.openedFiles"
         :previewed="openedFiles.previewedFile"
         :selected="selectedFilePath"
-        @selected="selectedFilePath = $event"
+        @selected="onFileSelected($event)"
         @close-file="onFileClose($event)"
     />
 </div>
@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 import { openedFilesStoreName, directoryFilesStoreName } from './store';
 import IDirectoryFileSelection from './services/interfaces/directory-file-selection.interface';
@@ -53,10 +53,17 @@ export default Vue.extend({
                 this.selectedFilePath = this.lastOpenedFilePath;
             }
         },
+        onFileSelected(path: string): void {
+            this.selectedFilePath = path;
+            this.setLastOpenedFilePath(path);
+        },
         onFileClose(path: string): void {
             this.closeFile({ path, isCurrent: path === this.selectedFilePath });
             this.selectedFilePath = this.lastOpenedFilePath;
         },
+        ...mapMutations({
+            setLastOpenedFilePath: `${openedFilesStoreName}/setLastOpenedFilePath`
+        }),
         ...mapActions({
             loadItems: `${directoryFilesStoreName}/loadItems`,
             selectDirectoryFile: `${directoryFilesStoreName}/selectDirectoryFile`,
