@@ -7,6 +7,7 @@ const fileService = new FileService();
 const activeFiles = new Set<string>();
 
 const state = {
+    active: '',
     opened: [],
     preview: null
 };
@@ -34,6 +35,8 @@ const mutations = {
 
 const actions = {
     async openFile(context: any, payload: string): Promise<void> {
+        context.state.active = payload;
+
         if (context.getters.isPreviewed(payload)) {
             context.commit('closePreview');
         }
@@ -44,9 +47,13 @@ const actions = {
         }
     },
     async previewFile(context: any, payload: string): Promise<void> {
-        context.commit('closePreview');
-        const content = await fileService.readFile(payload);
-        context.commit('previewFile', { path: payload, content } as IFileContent);
+        context.state.active = payload;
+
+        if (!activeFiles.has(payload)) {
+            context.commit('closePreview');
+            const content = await fileService.readFile(payload);
+            context.commit('previewFile', { path: payload, content } as IFileContent);
+        }
     },
     closeFile(context: any, payload: string): void {
         const isPreviewed = context.getters.isPreviewed(payload);

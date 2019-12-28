@@ -12,6 +12,8 @@
         class="file-viewer"
         :opened="activeFiles.opened"
         :preview="activeFiles.preview"
+        :selected="activeFile"
+        @content-selected="activeFile = $event"
         @close-file="closeFile($event)"
     />
 </div>
@@ -29,6 +31,7 @@ import FileViewer from './components/file-viewer/file-viewer.vue';
 export default Vue.extend({
     data: () => ({
         baseUrl: 'd:/electron',
+        activeFile: '',
         directory: []
     }),
     components: {
@@ -46,6 +49,7 @@ export default Vue.extend({
             if (!isDirectory) {
                 const action = (isPreview ? this.previewFile : this.openFile);
                 await action.bind(this)(path);
+                this.activeFile = this.lastOpenedFile;
             }
         },
         ...mapActions({
@@ -59,7 +63,10 @@ export default Vue.extend({
     computed: {
         ...mapGetters({
             activeFiles: `${activeFilesStoreName}/activeFiles`
-        })
+        }),
+        lastOpenedFile(): string {
+            return this.$store.state[activeFilesStoreName].active;
+        }
     }
 });
 </script>

@@ -4,13 +4,13 @@
         class="selector-container"
         :selections="fileNames"
         :previewed = "previewName"
-        @content-selected="active = $event"
+        @content-selected="$emit('content-selected', $event)"
         @close-file="$emit('close-file', $event)"
     />
 
     <file-content-reader
         class="reader-container"
-        :content="contents.get(active)"
+        :content="contents.get(selected)"
     />
 </div>
 </template>
@@ -24,18 +24,10 @@ import FileContentReader from './file-content-reader.vue';
 import IFileContent from '../../services/interfaces/file-content.interface';
 
 export default Vue.extend({
-    props: ['opened', 'preview'],
-    data: () => ({
-        active: ''
-    }),
+    props: ['opened', 'preview', 'selected'],
     components: {
         FileContentSelector,
         FileContentReader
-    },
-    beforeMount(): void {
-        if (this.contents.size) {
-            this.active = this.contents.keys().next().value;
-        }
     },
     computed: {
         contents(): Map<string, Buffer> {
