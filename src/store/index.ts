@@ -1,17 +1,17 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import ActiveFilesStore from './active-files.store';
-import DirectoryListStore from './directory-list.store';
+import DirectoryFilesStore from './directory-files.store';
+import OpenedFilesStore from './opened-files.store';
 
 Vue.use(Vuex);
 
-export const activeFilesStoreName = 'activeFiles';
-export const directoryListStoreName = 'directoryList';
+export const directoryFilesStoreName = 'directoryFilesStore';
+export const openedFilesStoreName = 'openedFilesStore';
 
 export default new Vuex.Store({
     modules: {
-        [activeFilesStoreName]: ActiveFilesStore,
-        [directoryListStoreName]: DirectoryListStore
+        [directoryFilesStoreName]: DirectoryFilesStore,
+        [openedFilesStoreName]: OpenedFilesStore
     }
 });

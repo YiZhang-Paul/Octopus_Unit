@@ -2,9 +2,9 @@
 <div>
     <file-content-selector
         class="selector-container"
-        :selections="fileNames"
-        :previewed = "previewName"
-        @content-selected="$emit('content-selected', $event)"
+        :selections="filePaths"
+        :previewed = "previewedFilePath"
+        @selected="$emit('selected', $event)"
         @close-file="$emit('close-file', $event)"
     />
 
@@ -18,13 +18,13 @@
 <script lang="ts">
 import Vue from 'vue';
 
+import IFileContent from '../../services/interfaces/file-content.interface';
+
 import FileContentSelector from './file-content-selector.vue';
 import FileContentReader from './file-content-reader.vue';
 
-import IFileContent from '../../services/interfaces/file-content.interface';
-
 export default Vue.extend({
-    props: ['opened', 'preview', 'selected'],
+    props: ['opened', 'previewed', 'selected'],
     components: {
         FileContentSelector,
         FileContentReader
@@ -33,19 +33,19 @@ export default Vue.extend({
         contents(): Map<string, Buffer> {
             const map = new Map<string, Buffer>();
 
-            [...this.opened, this.preview].forEach((_: IFileContent) => {
-                if (_) {
-                    map.set(_.path, _.content);
+            [...this.opened, this.previewed].forEach((file: IFileContent) => {
+                if (file) {
+                    map.set(file.path, file.content);
                 }
             });
 
             return map;
         },
-        fileNames(): string[] {
+        filePaths(): string[] {
             return Array.from(this.contents.keys());
         },
-        previewName(): string {
-            return this.preview ? this.preview.path : '';
+        previewedFilePath(): string {
+            return this.previewed ? this.previewed.path : '';
         }
     }
 });

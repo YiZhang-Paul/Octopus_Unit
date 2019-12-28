@@ -4,8 +4,8 @@ let mainWindow: BrowserWindow | null;
 
 function createWindow(): void {
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1280,
+        height: 1024,
         webPreferences: {
             nodeIntegration: true
         }
@@ -13,7 +13,7 @@ function createWindow(): void {
 
     mainWindow.loadFile('index.html');
     mainWindow.maximize();
-    mainWindow.setAlwaysOnTop(true, 'normal');
+    mainWindow.setAlwaysOnTop(true);
     mainWindow.on('closed', () => mainWindow = null);
 
     setTimeout(() => {

@@ -1,13 +1,13 @@
 <template>
 <div class="main-container">
     <div class="selection-container"
-        v-for="name in selections"
-        :key="name"
-        @click="$emit('content-selected', name)">
+        v-for="path in selections"
+        :key="path"
+        @click="$emit('selected', path)">
 
-        <span v-if="!isPreviewed(name)">{{ getFileName(name) }}</span>
-        <span v-else><i>{{ getFileName(name) }}</i></span>
-        <span class="close-button" @click="$emit('close-file', name)">x</span>
+        <span v-if="!isPreviewed(path)">{{ getFileName(path) }}</span>
+        <span v-else><i>{{ getFileName(path) }}</i></span>
+        <span class="close-button" @click="$emit('close-file', path)">x</span>
     </div>
 </div>
 </template>

@@ -6,11 +6,11 @@ export default class DirectoryService implements IDirectoryService {
 
     public async listDirectory(path: string): Promise<string[]> {
         return new Promise((resolve, reject) => {
-            fs.readdir(path, (error: any, files: string[]) => {
+            fs.readdir(path, (error: any, fileNames: string[]) => {
                 if (error) {
                     console.log(error);
                 }
-                error ? reject([]) : resolve(files);
+                error ? reject([]) : resolve(fileNames);
             });
         });
     }

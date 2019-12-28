@@ -1,25 +1,25 @@
 <template>
-<directory-list
+<directory-file-list
     :directory="directory"
     :location="''"
-    @item-selected="onItemSelected"
+    @selected="onSelected"
 />
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 
-import DirectoryList from './directory-list.vue';
+import DirectoryFileList from './directory-file-list.vue';
 
 export default Vue.extend({
-    props: ['baseUrl', 'directory'],
+    props: ['base', 'directory'],
     components: {
-        DirectoryList
+        DirectoryFileList
     },
     methods: {
-        onItemSelected(payload: { path: string }): void {
-            payload.path = `${this.baseUrl}/${payload.path}`;
-            this.$emit('item-selected', payload);
+        onSelected(payload: { path: string }): void {
+            payload.path = `${this.base}/${payload.path}`;
+            this.$emit('selected', payload);
         }
     }
 });
