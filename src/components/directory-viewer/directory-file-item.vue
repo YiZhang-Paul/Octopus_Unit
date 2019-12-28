@@ -3,8 +3,7 @@
     <div class="file-container"
         :class="{ 'file-active': isFocused }"
         :style="styles"
-        @click="onClick(false)"
-        @dblclick="onClick(true)">{{ file.name }}
+        @click="onClick">{{ file.name }}
         <span class="expand-icon" v-if="isDirectory">{{ expandIcon }}</span>
     </div>
 
@@ -27,7 +26,8 @@ export default Vue.extend({
     props: ['file', 'location'],
     data: () => ({
         isExpanded: false,
-        isFocused: false
+        isFocused: false,
+        totalClicks: 0
     }),
     beforeCreate(): void {
         if (this.$options.components) {
@@ -35,17 +35,24 @@ export default Vue.extend({
         }
     },
     methods: {
-        onClick(isDoubleClick: boolean): void {
+        onClick(): void {
             if (this.isDirectory) {
                 this.isExpanded = !this.isExpanded;
             }
-            const payload = {
-                source: this,
-                filePath: this.selfLocation,
-                isPreview: !isDoubleClick,
-                isDirectory: this.isDirectory
-            };
-            this.$emit('selected', payload as IDirectoryFileSelection);
+
+            if (++this.totalClicks !== 1) {
+                return;
+            }
+            setTimeout(() => {
+                const payload = {
+                    source: this,
+                    filePath: this.selfLocation,
+                    isPreview: this.totalClicks === 1,
+                    isDirectory: this.isDirectory
+                };
+                this.$emit('selected', payload as IDirectoryFileSelection);
+                this.totalClicks = 0;
+            }, 200);
         }
     },
     computed: {
