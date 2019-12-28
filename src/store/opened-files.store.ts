@@ -17,18 +17,34 @@ const mutations = {
         openedFilePaths.add(file.path);
         state.openedFiles.push(file);
     },
-    closeFile(state: any, path: string): void {
+    closeFile(state: any, payload: { path: string, isCurrent: boolean }): void {
+        const { path, isCurrent } = payload;
         openedFilePaths.delete(path);
+        const index = state.openedFiles.findIndex((_: IFileContent) => _.path === path);
         state.openedFiles = state.openedFiles.filter((_: IFileContent) => _.path !== path);
+
+        if (!isCurrent) {
+            return;
+        }
+
+        if (!state.openedFiles.length) {
+            return state.lastOpenedFilePath = state.previewedFile ? state.previewedFile.path : '';
+        }
+        state.lastOpenedFilePath = state.openedFiles[index > 0 ? index - 1 : index].path;
     },
     previewFile(state: any, file: IFileContent): void {
         openedFilePaths.add(file.path);
         state.previewedFile = file;
     },
     closePreview(state: any): void {
-        if (state.previewedFile) {
-            openedFilePaths.delete(state.previewedFile.path);
-            state.previewedFile = null;
+        if (!state.previewedFile) {
+            return;
+        }
+        openedFilePaths.delete(state.previewedFile.path);
+        state.previewedFile = null;
+
+        if (state.openedFiles.length) {
+            state.lastOpenedFilePath = state.openedFiles.slice(-1)[0].path;
         }
     }
 };
@@ -55,9 +71,9 @@ const actions = {
             context.commit('previewFile', { path, content } as IFileContent);
         }
     },
-    closeFile(context: any, path: string): void {
-        const isPreviewed = context.getters.isPreviewed(path);
-        context.commit(isPreviewed ? 'closePreview' : 'closeFile', path);
+    closeFile(context: any, payload: { path: string, isCurrent: boolean }): void {
+        const isPreviewed = context.getters.isPreviewed(payload.path);
+        context.commit(isPreviewed ? 'closePreview' : 'closeFile', payload);
     }
 };
 

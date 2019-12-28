@@ -15,7 +15,7 @@
         :previewed="openedFiles.previewedFile"
         :selected="selectedFilePath"
         @selected="selectedFilePath = $event"
-        @close-file="closeFile($event)"
+        @close-file="onFileClose($event)"
     />
 </div>
 </template>
@@ -52,6 +52,10 @@ export default Vue.extend({
                 await action.bind(this)(filePath);
                 this.selectedFilePath = this.lastOpenedFilePath;
             }
+        },
+        onFileClose(path: string): void {
+            this.closeFile({ path, isCurrent: path === this.selectedFilePath });
+            this.selectedFilePath = this.lastOpenedFilePath;
         },
         ...mapActions({
             loadItems: `${directoryFilesStoreName}/loadItems`,

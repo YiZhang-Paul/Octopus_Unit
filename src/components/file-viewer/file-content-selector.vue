@@ -7,7 +7,7 @@
 
         <span v-if="!isPreviewed(path)">{{ getFileName(path) }}</span>
         <span v-else><i>{{ getFileName(path) }}</i></span>
-        <span class="close-button" @click="$emit('close-file', path)">x</span>
+        <span class="close-button" @click.stop="$emit('close-file', path)">x</span>
     </div>
 </div>
 </template>
