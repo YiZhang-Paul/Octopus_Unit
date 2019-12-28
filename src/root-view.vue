@@ -60,7 +60,7 @@ export default Vue.extend({
             previewFile: `${openedFilesStoreName}/previewFile`,
             closeFile: `${openedFilesStoreName}/closeFile`
         })
-    }
+    },
     computed: {
         ...mapGetters({
             openedFiles: `${openedFilesStoreName}/openedFiles`

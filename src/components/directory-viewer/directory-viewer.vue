@@ -17,8 +17,8 @@ export default Vue.extend({
         DirectoryFileList
     },
     methods: {
-        onSelected(payload: { path: string }): void {
-            payload.path = `${this.base}/${payload.path}`;
+        onSelected(payload: { filePath: string }): void {
+            payload.filePath = `${this.base}/${payload.filePath}`;
             this.$emit('selected', payload);
         }
     }
