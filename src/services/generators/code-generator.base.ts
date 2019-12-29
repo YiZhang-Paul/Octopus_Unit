@@ -27,7 +27,19 @@ export default abstract class CodeGenerator<TContext, TResolved> implements ICod
     }
 
     protected addBaseHandlers(handlers: BaseHandlerSet<TContext, TResolved>): void {
-        this._baseHandlers.push(...handlers);
+        const indexes = new Map<string, number>();
+        this._baseHandlers.forEach(([name], index) => indexes.set(name, index));
+
+        for (const handler of handlers) {
+            const [name] = handler;
+
+            if (indexes.has(name)) {
+                this._baseHandlers[indexes.get(name) || 0] = handler;
+            }
+            else {
+                this._baseHandlers.push(handler);
+            }
+        }
     }
 
     protected async resolve(
