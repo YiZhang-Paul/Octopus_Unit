@@ -2,10 +2,10 @@ import CodeGenerator from '../code-generator.base';
 
 export default abstract class BoilerplateGeneratorService<TContext, TResolved> extends CodeGenerator<TContext, TResolved> {
 
-    constructor(hookHandlers: any) {
-        super(hookHandlers);
+    constructor() {
+        super();
 
-        Object.assign(this.baseHandlers, {
+        this.addBaseHandlers({
             imports: this.resolveImports.bind(this),
             declarations: this.resolveDeclaration.bind(this),
             mocks: this.resolveMocks.bind(this),

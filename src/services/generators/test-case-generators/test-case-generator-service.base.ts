@@ -2,10 +2,10 @@ import CodeGenerator from '../code-generator.base';
 
 export default abstract class TestCaseGeneratorService<TContext, TResolved> extends CodeGenerator<TContext, TResolved> {
 
-    constructor(hookHandlers: any) {
-        super(hookHandlers);
+    constructor() {
+        super();
 
-        Object.assign(this.baseHandlers, {
+        this.addBaseHandlers({
             signature: this.resolveSignature.bind(this),
             localData: this.resolveLocalData.bind(this),
             mockSetups: this.resolveMockSetups.bind(this),

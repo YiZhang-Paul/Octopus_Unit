@@ -2,30 +2,30 @@ import ICodeGenerator from '../interfaces/code-generator.interface';
 import IHookHandler from '../interfaces/hook-handler.interface';
 
 type BaseHandler<T, K> = (_: T) => Promise<K>;
+type BaseHandlerSet<T, K> = { [key: string]: BaseHandler<T, K> };
 
 export default abstract class CodeGenerator<TContext, TResolved> implements ICodeGenerator<TContext> {
 
-    protected baseHandlers: { [key: string]: BaseHandler<TContext, TResolved> } = {};
-    private _hookHandlers: any;
+    private _baseHandlers: BaseHandlerSet<TContext, TResolved> = {};
 
-    constructor(hookHandlers: any) {
-        this._hookHandlers = hookHandlers;
-    }
-
-    public async generate(context: TContext): Promise<TContext> {
+    public async generate(context: TContext, hookHandlers: any): Promise<TContext> {
         Object.defineProperty(context, 'parsed', {
-            value: await this.resolve(context, this.parseSource.bind(this), this._hookHandlers.parser),
+            value: await this.resolve(context, this.parseSource.bind(this), hookHandlers.parser),
             enumerable: true
         });
 
-        for (const key in Object.keys(this.baseHandlers)) {
+        for (const key in Object.keys(this._baseHandlers)) {
             Object.defineProperty(context, key, {
-                value: await this.resolve(context, this.baseHandlers[key], this._hookHandlers[key]),
+                value: await this.resolve(context, this._baseHandlers[key], hookHandlers[key]),
                 enumerable: true
             });
         }
 
         return context;
+    }
+
+    protected addBaseHandlers(handlers: BaseHandlerSet<TContext, TResolved>): void {
+        Object.assign(this._baseHandlers, handlers);
     }
 
     protected async resolve(
