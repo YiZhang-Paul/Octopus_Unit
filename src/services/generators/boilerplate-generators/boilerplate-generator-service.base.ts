@@ -6,13 +6,13 @@ export default abstract class BoilerplateGeneratorService<TContext, TResolved> e
     constructor(parser: ICodeParser<TContext, TResolved>) {
         super(parser);
 
-        this.addBaseHandlers({
-            imports: this.resolveImports.bind(this),
-            declarations: this.resolveDeclaration.bind(this),
-            mocks: this.resolveMocks.bind(this),
-            mockSetups: this.resolveMockSetups.bind(this),
-            subject: this.resolveUnitUnderTest.bind(this)
-        });
+        this.addBaseHandlers([
+            ['imports', this.resolveImports.bind(this)],
+            ['declarations', this.resolveDeclaration.bind(this)],
+            ['mocks', this.resolveMocks.bind(this)],
+            ['mockSetups', this.resolveMockSetups.bind(this)],
+            ['subject', this.resolveUnitUnderTest.bind(this)]
+        ]);
     }
 
     protected abstract resolveImports(context: TContext): Promise<TResolved>;

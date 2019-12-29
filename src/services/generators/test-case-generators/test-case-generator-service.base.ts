@@ -6,13 +6,13 @@ export default abstract class TestCaseGeneratorService<TContext, TResolved> exte
     constructor(parser: ICodeParser<TContext, TResolved>) {
         super(parser);
 
-        this.addBaseHandlers({
-            signature: this.resolveSignature.bind(this),
-            localData: this.resolveLocalData.bind(this),
-            mockSetups: this.resolveMockSetups.bind(this),
-            invocation: this.resolveInvocation.bind(this),
-            assertions: this.resolveAssertions.bind(this)
-        });
+        this.addBaseHandlers([
+            ['signature', this.resolveSignature.bind(this)],
+            ['localData', this.resolveLocalData.bind(this)],
+            ['mockSetups', this.resolveMockSetups.bind(this)],
+            ['invocation', this.resolveInvocation.bind(this)],
+            ['assertions', this.resolveAssertions.bind(this)]
+        ]);
     }
 
     protected abstract resolveSignature(context: TContext): Promise<TResolved>;
