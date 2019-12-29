@@ -6,6 +6,7 @@ export default abstract class BoilerplateGeneratorService<TContext, TResolved> e
         imports: this.resolveImports.bind(this),
         declarations: this.resolveDeclaration.bind(this),
         mocks: this.resolveMocks.bind(this),
+        mockSetups: this.resolveMockSetups.bind(this),
         subject: this.resolveUnitUnderTest.bind(this)
     });
 
@@ -29,5 +30,6 @@ export default abstract class BoilerplateGeneratorService<TContext, TResolved> e
     protected abstract resolveImports(context: TContext): Promise<TResolved>;
     protected abstract resolveDeclaration(context: TContext): Promise<TResolved>;
     protected abstract resolveMocks(context: TContext): Promise<TResolved>;
+    protected abstract resolveMockSetups(context: TContext): Promise<TResolved>;
     protected abstract resolveUnitUnderTest(context: TContext): Promise<TResolved>;
 }
