@@ -1,9 +1,10 @@
+import ICodeParser from '../../interfaces/code-parser.interface';
 import CodeGenerator from '../code-generator.base';
 
 export default abstract class TestCaseGeneratorService<TContext, TResolved> extends CodeGenerator<TContext, TResolved> {
 
-    constructor() {
-        super();
+    constructor(parser: ICodeParser<TContext, TResolved>) {
+        super(parser);
 
         this.addBaseHandlers({
             signature: this.resolveSignature.bind(this),
