@@ -2,7 +2,7 @@ import { StoreOptions } from 'vuex';
 
 import IFileNode from '../services/interfaces/file-node.interface';
 import DirectoryService from '../services/io/directory-service';
-import DirectoryViewerService from '../services/viewers/directory-viewer-service';
+import DirectoryViewerService from '../services/viewers/directory-viewer-service/directory-viewer-service';
 
 type StoreState = { activeFile: null | { isFocused: boolean } };
 

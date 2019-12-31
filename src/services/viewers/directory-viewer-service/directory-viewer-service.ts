@@ -1,7 +1,7 @@
 import * as pathService from 'path';
 
-import IFileNode from '../interfaces/file-node.interface';
-import IDirectoryService from '../interfaces/directory-service.interface';
+import IFileNode from '../../interfaces/file-node.interface';
+import IDirectoryService from '../../interfaces/directory-service.interface';
 
 export default class DirectoryViewerService {
 
