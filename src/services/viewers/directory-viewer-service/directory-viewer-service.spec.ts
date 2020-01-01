@@ -1,3 +1,4 @@
+import 'mocha';
 import { expect } from 'chai';
 import { stub, SinonStubbedInstance } from 'sinon';
 
@@ -9,7 +10,10 @@ context('directory viewer service unit test', () => {
     let directoryViewerService: DirectoryViewerService;
 
     beforeEach('stub setup', () => {
-        directoryServiceStub = stub({} as IDirectoryService);
+        directoryServiceStub = stub({
+            async listDirectory(_: any) { return []; },
+            async isDirectory(_: any) { return false; }
+        } as IDirectoryService);
     });
 
     beforeEach('test setup', () => {
@@ -26,7 +30,7 @@ context('directory viewer service unit test', () => {
 
             expect(result.length).to.equal(1);
             expect(result[0].name).to.equal(file);
-            expect(result[0].children).to.be.not.null;
+            expect(result[0].children).to.be.null;
         });
     });
 });
