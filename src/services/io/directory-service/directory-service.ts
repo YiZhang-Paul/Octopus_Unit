@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
-import Logger from './logger';
-import IDirectoryService from '../interfaces/directory-service.interface';
+import Logger from '../logger';
+import IDirectoryService from '../../interfaces/directory-service.interface';
 
 export default class DirectoryService implements IDirectoryService {
 
@@ -17,12 +17,12 @@ export default class DirectoryService implements IDirectoryService {
     }
 
     public async isDirectory(path: string): Promise<boolean> {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             fs.lstat(path, (error: any, stats: fs.Stats) => {
                 if (error) {
                     Logger.log(error);
                 }
-                error ? reject(false) : resolve(stats.isDirectory());
+                resolve(error ? false : stats.isDirectory());
             });
         });
     }

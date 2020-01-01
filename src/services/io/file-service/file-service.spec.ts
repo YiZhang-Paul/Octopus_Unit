@@ -7,11 +7,11 @@ import FileService from './file-service';
 
 context('file service integration test', () => {
     let service: FileService;
-    const samplePath = path.resolve(__dirname, '../../../testing-temp')
+    const samplePath = path.resolve(__dirname, '../../../testing-temp');
 
     beforeEach('test setup', () => {
         service = new FileService();
-        fs.outputFileSync(`${samplePath}/sample.txt`, 'sample text');
+        fs.outputFileSync(`${samplePath}/sample_file.txt`, 'sample text');
     });
 
     afterEach('test teardown', () => {
@@ -20,14 +20,14 @@ context('file service integration test', () => {
 
     describe('readFile', () => {
         it('should return content read from file', async () => {
-            const result = await service.readFile(`${samplePath}/sample.txt`);
+            const result = await service.readFile(`${samplePath}/sample_file.txt`);
 
             expect(result.toString()).to.equal('sample text');
         });
 
         it('should throw empty string when file does not exist', async () => {
             try {
-                await service.readFile(`${samplePath}/invalid.txt`);
+                await service.readFile(`${samplePath}/invalid_file.txt`);
 
                 throw 'should not reach this line';
             }
