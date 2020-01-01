@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 
+import Logger from './logger';
 import IDirectoryService from '../interfaces/directory-service.interface';
 
 export default class DirectoryService implements IDirectoryService {
@@ -8,7 +9,7 @@ export default class DirectoryService implements IDirectoryService {
         return new Promise((resolve, reject) => {
             fs.readdir(path, (error: any, fileNames: string[]) => {
                 if (error) {
-                    console.log(error);
+                    Logger.log(error);
                 }
                 error ? reject([]) : resolve(fileNames);
             });
@@ -19,7 +20,7 @@ export default class DirectoryService implements IDirectoryService {
         return new Promise((resolve, reject) => {
             fs.lstat(path, (error: any, stats: fs.Stats) => {
                 if (error) {
-                    console.log(error);
+                    Logger.log(error);
                 }
                 error ? reject(false) : resolve(stats.isDirectory());
             });

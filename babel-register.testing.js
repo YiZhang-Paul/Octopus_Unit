@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'testing';
+
 require('@babel/register')({
     cache: false,
     extensions: ['.ts'],
