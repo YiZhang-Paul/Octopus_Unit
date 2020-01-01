@@ -1,15 +1,6 @@
 require('@babel/register')({
     cache: false,
     extensions: ['.ts'],
-    plugins: [
-        '@babel/proposal-class-properties',
-        [
-            'istanbul',
-            {
-                exclude: ['**/*.spec.ts']
-            }
-        ]
-    ],
     presets: [
         [
             '@babel/preset-env',
@@ -21,4 +12,13 @@ require('@babel/register')({
         ],
         '@babel/preset-typescript',
     ],
+    plugins: [
+        '@babel/proposal-class-properties',
+        [
+            'istanbul',
+            {
+                exclude: ['**/*.interface.ts', '**/*.spec.ts']
+            }
+        ]
+    ]
 });

@@ -3,8 +3,9 @@
     "version": "0.0.0",
     "description": "a versatile unit testing utility tool",
     "scripts": {
+        "test": "rm -rf .nyc_output && electron-mocha --require ./babel-register.js src/**/*.spec.ts",
+        "cover": "npm run test && nyc --clean=false --require ./babel-register.js --instrument=false --source-map=false --all=true -- node -e ''",
         "build:dev": "webpack --config webpack/development.config.js --watch",
-        "test:dev": "electron-mocha --require ./babel-register.js src/**/*.spec.ts && nyc report",
         "start:dev": "npm run build:dev"
     },
     "repository": {
