@@ -1,7 +1,7 @@
 import { StoreOptions } from 'vuex';
 
 import IFileContent from '../services/interfaces/file-content.interface';
-import FileService from '../services/io/file-service';
+import FileService from '../services/io/file-service/file-service';
 
 type StoreState = {
     lastOpenedFilePath: string;

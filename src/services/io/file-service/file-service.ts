@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-import IFileService from '../interfaces/file-service.interface';
+import IFileService from '../../interfaces/file-service.interface';
 
 export default class FileService implements IFileService {
 
