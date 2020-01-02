@@ -2,22 +2,34 @@ import 'mocha';
 import { expect } from 'chai';
 import { stub, SinonStubbedInstance } from 'sinon';
 
+import Types from '../../../ioc/types';
+import Container from '../../../ioc/container';
 import IDirectoryService from '../../interfaces/directory-service.interface';
-import DirectoryViewerService from './directory-viewer-service';
+import IDirectoryViewerService from '../../interfaces/directory-viewer-service.interface';
 
 context('directory viewer service unit test', () => {
     let directoryServiceStub: SinonStubbedInstance<IDirectoryService>;
-    let directoryViewerService: DirectoryViewerService;
+    let directoryViewerService: IDirectoryViewerService;
 
     beforeEach('stub setup', () => {
+        Container.snapshot();
+
         directoryServiceStub = stub({
             async listDirectory(_: any) { return []; },
             async isDirectory(_: any) { return false; }
         } as IDirectoryService);
+
+        Container
+            .rebind<IDirectoryService>(Types.IDirectoryService)
+            .toConstantValue(directoryServiceStub);
     });
 
     beforeEach('test setup', () => {
-        directoryViewerService = new DirectoryViewerService(directoryServiceStub);
+        directoryViewerService = Container.get<IDirectoryViewerService>(Types.IDirectoryViewerService);
+    });
+
+    afterEach('test teardown', () => {
+        Container.restore();
     });
 
     describe('listDirectoryRecursive', () => {
