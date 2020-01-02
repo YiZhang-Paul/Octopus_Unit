@@ -5,16 +5,14 @@ import * as path from 'path';
 
 import Container from '../../../ioc/container';
 import Types from '../../../ioc/types';
-import ILogger from '../../interfaces/logger.interface';
-
-import DirectoryService from './directory-service';
+import IDirectoryService from '../../interfaces/directory-service.interface';
 
 context('directory service integration test', () => {
-    let service: DirectoryService;
+    let service: IDirectoryService;
     const samplePath = path.resolve(__dirname, '../../../testing-temp');
 
     beforeEach('test setup', () => {
-        service = new DirectoryService(Container.get<ILogger>(Types.ILogger));
+        service = Container.get<IDirectoryService>(Types.IDirectoryService);
         fs.mkdirSync(`${samplePath}/sample_dir/`, { recursive: true });
         fs.outputFileSync(`${samplePath}/sample_file.txt`, '');
     });

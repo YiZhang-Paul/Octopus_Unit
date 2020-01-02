@@ -1,11 +1,15 @@
+import { inject, injectable } from 'inversify';
 import * as pathService from 'path';
 
+import Types from '../../../ioc/types';
 import IFileNode from '../../interfaces/file-node.interface';
 import IDirectoryService from '../../interfaces/directory-service.interface';
+import IDirectoryViewerService from '../../interfaces/directory-viewer-service.interface';
 
-export default class DirectoryViewerService {
+@injectable()
+export default class DirectoryViewerService implements IDirectoryViewerService {
 
-    constructor(private _directoryService: IDirectoryService) { }
+    constructor(@inject(Types.IDirectoryService) private _directoryService: IDirectoryService) { }
 
     public async listDirectoryRecursive(path: string): Promise<IFileNode[]> {
         const fileNames = await this._directoryService.listDirectory(path);

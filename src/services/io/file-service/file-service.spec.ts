@@ -5,16 +5,14 @@ import * as path from 'path';
 
 import Container from '../../../ioc/container';
 import Types from '../../../ioc/types';
-import ILogger from '../../interfaces/logger.interface';
-
-import FileService from './file-service';
+import IFileService from '../../interfaces/file-service.interface';
 
 context('file service integration test', () => {
-    let service: FileService;
+    let service: IFileService;
     const samplePath = path.resolve(__dirname, '../../../testing-temp');
 
     beforeEach('test setup', () => {
-        service = new FileService(Container.get<ILogger>(Types.ILogger));
+        service = Container.get<IFileService>(Types.IFileService);
         fs.outputFileSync(`${samplePath}/sample_file.txt`, 'sample text');
     });
 

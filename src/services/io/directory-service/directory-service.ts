@@ -1,10 +1,11 @@
-import { inject } from 'inversify';
+import { inject, injectable } from 'inversify';
 import * as fs from 'fs';
 
 import Types from '../../../ioc/types';
 import ILogger from '../../interfaces/logger.interface';
 import IDirectoryService from '../../interfaces/directory-service.interface';
 
+@injectable()
 export default class DirectoryService implements IDirectoryService {
 
     constructor(@inject(Types.ILogger) private _logger: ILogger) { }

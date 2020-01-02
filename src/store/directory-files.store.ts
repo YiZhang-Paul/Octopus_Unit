@@ -2,16 +2,12 @@ import { StoreOptions } from 'vuex';
 
 import Container from '../ioc/container';
 import Types from '../ioc/types';
-import ILogger from '../services/interfaces/logger.interface';
 import IFileNode from '../services/interfaces/file-node.interface';
-import DirectoryService from '../services/io/directory-service/directory-service';
-import DirectoryViewerService from '../services/viewers/directory-viewer-service/directory-viewer-service';
+import IDirectoryViewerService from '../services/interfaces/directory-viewer-service.interface';
 
 type StoreState = { activeFile: null | { isFocused: boolean } };
 
-const directoryService = new DirectoryService(Container.get<ILogger>(Types.ILogger));
-const directoryViewerService = new DirectoryViewerService(directoryService);
-
+const directoryViewerService = Container.get<IDirectoryViewerService>(Types.IDirectoryViewerService);
 const state: StoreState = { activeFile: null };
 
 const mutations = {
