@@ -21,7 +21,13 @@ require('@babel/register')({
                 legacy: true
             }
         ],
-        '@babel/proposal-class-properties',
+        [
+            '@babel/plugin-proposal-class-properties',
+            {
+                loose: true
+            }
+        ],
+        'babel-plugin-parameter-decorator',
         [
             'istanbul',
             {

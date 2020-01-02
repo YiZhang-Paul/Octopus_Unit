@@ -5,10 +5,12 @@ import Types from '../../../ioc/types';
 import ILogger from '../../interfaces/logger.interface';
 import IDirectoryService from '../../interfaces/directory-service.interface';
 
+const { ILogger: ILoggerKey } = Types;
+
 @injectable()
 export default class DirectoryService implements IDirectoryService {
 
-    constructor(@inject(Types.ILogger) private _logger: ILogger) { }
+    constructor(@inject(ILoggerKey) private _logger: ILogger) { }
 
     public async listDirectory(path: string): Promise<string[]> {
         return new Promise((resolve, reject) => {

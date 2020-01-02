@@ -5,10 +5,12 @@ import Types from '../../../ioc/types';
 import ILogger from '../../interfaces/logger.interface';
 import IFileService from '../../interfaces/file-service.interface';
 
+const { ILogger: ILoggerKey } = Types;
+
 @injectable()
 export default class FileService implements IFileService {
 
-    constructor(@inject(Types.ILogger) private _logger: ILogger) { }
+    constructor(@inject(ILoggerKey) private _logger: ILogger) { }
 
     public async readFile(path: string): Promise<Buffer> {
         return new Promise((resolve, reject) => {

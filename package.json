@@ -35,6 +35,7 @@
         "@types/node": "^13.1.1",
         "@types/sinon": "^7.5.1",
         "babel-plugin-istanbul": "^6.0.0",
+        "babel-plugin-parameter-decorator": "^1.0.14",
         "chai": "^4.2.0",
         "css-loader": "^3.4.0",
         "electron": "^7.1.7",
