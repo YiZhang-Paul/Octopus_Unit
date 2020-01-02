@@ -1,5 +1,8 @@
 import { StoreOptions } from 'vuex';
 
+import Container from '../ioc/container';
+import Types from '../ioc/types';
+import ILogger from '../services/interfaces/logger.interface';
 import IFileContent from '../services/interfaces/file-content.interface';
 import FileService from '../services/io/file-service/file-service';
 
@@ -9,7 +12,7 @@ type StoreState = {
     previewedFile: IFileContent | null
 };
 
-const fileService = new FileService();
+const fileService = new FileService(Container.get<ILogger>(Types.ILogger));
 const openedFilePaths = new Set<string>();
 
 const state: StoreState = {

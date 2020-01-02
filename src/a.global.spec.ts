@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { remote } from 'electron';
 
 declare const window: any;

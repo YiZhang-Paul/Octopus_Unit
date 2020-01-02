@@ -3,6 +3,10 @@ import { expect } from 'chai';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
+import Container from '../../../ioc/container';
+import Types from '../../../ioc/types';
+import ILogger from '../../interfaces/logger.interface';
+
 import FileService from './file-service';
 
 context('file service integration test', () => {
@@ -10,7 +14,7 @@ context('file service integration test', () => {
     const samplePath = path.resolve(__dirname, '../../../testing-temp');
 
     beforeEach('test setup', () => {
-        service = new FileService();
+        service = new FileService(Container.get<ILogger>(Types.ILogger));
         fs.outputFileSync(`${samplePath}/sample_file.txt`, 'sample text');
     });
 

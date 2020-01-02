@@ -3,6 +3,10 @@ import { expect } from 'chai';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
+import Container from '../../../ioc/container';
+import Types from '../../../ioc/types';
+import ILogger from '../../interfaces/logger.interface';
+
 import DirectoryService from './directory-service';
 
 context('directory service integration test', () => {
@@ -10,7 +14,7 @@ context('directory service integration test', () => {
     const samplePath = path.resolve(__dirname, '../../../testing-temp');
 
     beforeEach('test setup', () => {
-        service = new DirectoryService();
+        service = new DirectoryService(Container.get<ILogger>(Types.ILogger));
         fs.mkdirSync(`${samplePath}/sample_dir/`, { recursive: true });
         fs.outputFileSync(`${samplePath}/sample_file.txt`, '');
     });
