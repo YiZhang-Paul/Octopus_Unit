@@ -1,107 +1,124 @@
-import { StoreOptions } from 'vuex';
+import { ActionContext, StoreOptions } from 'vuex';
 
-import Container from '../ioc/container';
-import Types from '../ioc/types';
-import IFileService from '../services/interfaces/file-service.interface';
-import IFileContent from '../services/interfaces/file-content.interface';
+import Types from '../core/ioc/types';
+import Container from '../core/ioc/container';
+import IFileContent from '../core/interface/io/file/file-content.interface';
+import IFileService from '../core/interface/io/file/file-service.interface';
 
-type StoreState = {
-    lastOpenedFilePath: string;
-    openedFiles: IFileContent[];
-    previewedFile: IFileContent | null
+type State = {
+    lastOpened: IFileContent | null;
+    opened: IFileContent[];
+    previewed: IFileContent | null;
 };
 
 const fileService = Container.get<IFileService>(Types.IFileService);
-const openedFilePaths = new Set<string>();
+const pathLookup = new Set<string>();
 
-const state: StoreState = {
-    lastOpenedFilePath: '',
-    openedFiles: [],
-    previewedFile: null
+const state: State = {
+    lastOpened: null,
+    opened: [],
+    previewed: null
 };
 
 const mutations = {
-    setLastOpenedFilePath(state: StoreState, path: string): void {
-        state.lastOpenedFilePath = path;
+    setLastOpened(state: State, file: IFileContent | null): void {
+        state.lastOpened = file;
     },
-    openFile(state: StoreState, file: IFileContent): void {
-        openedFilePaths.add(file.path);
-        state.openedFiles.push(file);
+    addOpened(state: State, file: IFileContent): void {
+        pathLookup.add(file.path);
+        state.opened.push(file);
     },
-    closeFile(state: StoreState, path: string): void {
-        openedFilePaths.delete(path);
-        state.openedFiles = state.openedFiles.filter(_ => _.path !== path);
+    removeOpened(state: State, path: string): void {
+        pathLookup.delete(path);
+        state.opened = state.opened.filter(_ => _.path !== path);
     },
-    previewFile(state: StoreState, file: IFileContent): void {
-        openedFilePaths.add(file.path);
-        state.previewedFile = file;
+    setPreviewed(state: State, file: IFileContent): void {
+        pathLookup.add(file.path);
+        state.previewed = file;
     },
-    closePreview(state: StoreState): void {
-        if (state.previewedFile) {
-            openedFilePaths.delete(state.previewedFile.path);
-            state.previewedFile = null;
+    removePreviewed(state: State): void {
+        if (state.previewed) {
+            pathLookup.delete(state.previewed.path);
+            state.previewed = null;
         }
     }
 };
 
 const actions = {
-    async openFile(context: { getters: any, commit: any }, path: string): Promise<void> {
+    async setLastOpenedFile(context: ActionContext<State, any>, path: string): Promise<void> {
+        const { getters, commit, state } = context;
+        const isPreviewed = getters.isPreviewed(path);
+        const file = isPreviewed ? state.previewed : state.opened.find(_ => _.path === path);
+
+        if (!file) {
+            throw new Error('Can only set last opened file to a file that is currently opened.');
+        }
+        commit('setLastOpened', file);
+    },
+    async openFile(context: ActionContext<State, any>, path: string): Promise<void> {
         const { getters, commit } = context;
 
         if (getters.isPreviewed(path)) {
-            commit('closePreview');
+            commit('removePreviewed');
         }
+        const content = await fileService.readFile(path);
+        const file = { path, content } as IFileContent;
 
-        if (!openedFilePaths.has(path)) {
-            const content = await fileService.readFile(path);
-            commit('openFile', { path, content } as IFileContent);
+        if (!pathLookup.has(path)) {
+            commit('addOpened', file);
         }
-        commit('setLastOpenedFilePath', path);
+        commit('setLastOpened', file);
     },
-    async previewFile(context: any, path: string): Promise<void> {
-        const { commit } = context;
-
-        if (!openedFilePaths.has(path)) {
-            commit('closePreview');
-            const content = await fileService.readFile(path);
-            commit('previewFile', { path, content } as IFileContent);
-        }
-        commit('setLastOpenedFilePath', path);
-    },
-    closeFile(context: { getters: any, commit: any, state: StoreState }, payload: { path: string, isCurrent: boolean }): void {
+    closeFile(context: ActionContext<State, any>, payload: { path: string, isCurrent: boolean }): void {
         const { path, isCurrent } = payload;
         const { getters, commit, state } = context;
         const isPreviewed = getters.isPreviewed(path);
-        const index = state.openedFiles.findIndex(_ => _.path === path);
-        commit(isPreviewed ? 'closePreview' : 'closeFile', path);
+        const index = state.opened.findIndex(_ => _.path === path);
+        commit(isPreviewed ? 'removePreviewed' : 'removeOpened', path);
 
-        if (isPreviewed && state.openedFiles.length) {
-            commit('setLastOpenedFilePath', state.openedFiles.slice(-1)[0].path);
+        if (isPreviewed) {
+            const lastOpened = state.opened.slice(-1)[0];
+            commit('setLastOpened', lastOpened || null);
+
+            return;
         }
 
-        if (isPreviewed || !isCurrent) {
+        if (!isCurrent) {
             return;
         }
         // shift focus to next available file that is opened or previewed
-        if (!state.openedFiles.length) {
-            const path = state.previewedFile ? state.previewedFile.path : '';
-            commit('setLastOpenedFilePath', path);
+        if (!state.opened.length) {
+            commit('setLastOpened', state.previewed || null);
         }
         else if (index >= 0) {
             const nextIndex = Math.max(0, index - 1);
-            commit('setLastOpenedFilePath', state.openedFiles[nextIndex].path);
+            commit('setLastOpened', state.opened[nextIndex]);
         }
+    },
+    async previewFile(context: ActionContext<State, any>, path: string): Promise<void> {
+        const { commit } = context;
+        const content = await fileService.readFile(path);
+        const file = { path, content } as IFileContent;
+
+        if (!pathLookup.has(path)) {
+            commit('removePreviewed');
+            commit('setPreviewed', file);
+        }
+        commit('setLastOpened', file);
     }
 };
 
 const getters = {
-    isPreviewed(state: StoreState): Function {
-        return (path: string): boolean => !!state.previewedFile && state.previewedFile.path === path;
+    isPreviewed(state: State): Function {
+        return (path: string): boolean => !!state.previewed && state.previewed.path === path;
     },
-    openedFiles(state: StoreState): { openedFiles: IFileContent[], previewedFile: IFileContent | null } | null {
-        const { openedFiles, previewedFile } = state;
+    lastOpenedFile(state: State): IFileContent | null {
+        return state.lastOpened;
+    },
+    openedFiles(state: State): { opened: IFileContent[], previewed: IFileContent | null } | null {
+        const { opened, previewed } = state;
 
-        return openedFiles.length || previewedFile ? ({ openedFiles, previewedFile }) : null;
+        return opened.length || previewed ? ({ opened, previewed }) : null;
     }
 };
 
@@ -111,4 +128,4 @@ export default {
     mutations,
     actions,
     getters
-} as StoreOptions<StoreState>;
+} as StoreOptions<State>;

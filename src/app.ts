@@ -2,13 +2,12 @@ import 'reflect-metadata';
 import Vue from 'vue';
 
 import './styles.scss';
-import store from './store';
-import RootView from './root-view.vue';
+import Store from './store';
+import SourceCodeViewer from './module/source-code-viewer/source-code-viewer.vue';
 
 new Vue({
     el: '#app',
-    store,
-    template: '<root-view/>',
-    components: { RootView },
-    render: _ => _(RootView)
+    store: Store.store,
+    components: { SourceCodeViewer },
+    render: _ => _(SourceCodeViewer)
 });
