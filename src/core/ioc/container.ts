@@ -3,7 +3,7 @@ import { Container } from 'inversify';
 import ILogger from '../interface/io/logger.interface';
 import IFileService from '../interface/io/file/file-service.interface';
 import IDirectoryService from '../interface/io/directory/directory-service.interface';
-import Logger from '../service/io/logger';
+import Logger from '../service/io/logger/logger';
 import FileService from '../service/io/file-service/file-service';
 import DirectoryService from '../service/io/directory-service/directory-service';
 
