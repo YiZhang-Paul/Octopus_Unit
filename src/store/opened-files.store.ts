@@ -69,31 +69,19 @@ const actions = {
         }
         commit('setLastOpened', file);
     },
-    closeFile(context: ActionContext<State, any>, payload: { path: string, isCurrent: boolean }): void {
+    closeOpenedFile(context: ActionContext<State, any>, payload: { path: string, isCurrent: boolean }): void {
         const { path, isCurrent } = payload;
-        const { getters, commit, state } = context;
-        const isPreviewed = getters.isPreviewed(path);
+        const { commit, state } = context;
         const index = state.opened.findIndex(_ => _.path === path);
-        commit(isPreviewed ? 'removePreviewed' : 'removeOpened', path);
-
-        if (isPreviewed) {
-            const lastOpened = state.opened.slice(-1)[0];
-            commit('setLastOpened', lastOpened || null);
-
-            return;
-        }
+        commit('removeOpened', path);
 
         if (!isCurrent) {
             return;
         }
         // shift focus to next available file that is opened or previewed
-        if (!state.opened.length) {
-            commit('setLastOpened', state.previewed || null);
-        }
-        else if (index >= 0) {
-            const nextIndex = Math.max(0, index - 1);
-            commit('setLastOpened', state.opened[nextIndex]);
-        }
+        const nextIndex = Math.max(0, index - 1);
+        const file = state.opened.length ? state.opened[nextIndex] : state.previewed;
+        commit('setLastOpened', file);
     },
     async previewFile(context: ActionContext<State, any>, path: string): Promise<void> {
         const { commit } = context;
@@ -105,6 +93,18 @@ const actions = {
             commit('setPreviewed', file);
         }
         commit('setLastOpened', file);
+    },
+    closePreviewFile(context: ActionContext<State, any>): void {
+        const { commit, state } = context;
+        const lastOpened = state.opened.slice(-1)[0];
+        commit('removePreviewed');
+        commit('setLastOpened', lastOpened || null);
+    },
+    closeFile(context: ActionContext<State, any>, payload: { path: string, isCurrent: boolean }): void {
+        const { path } = payload;
+        const { getters, dispatch } = context;
+        const isPreviewed = getters.isPreviewed(path);
+        dispatch(isPreviewed ? 'closePreviewFile' : 'closeOpenedFile', payload);
     }
 };
 
