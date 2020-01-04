@@ -1,14 +1,13 @@
 import { ActionContext, StoreOptions } from 'vuex';
 
-import Types from '../core/ioc/types';
-import Container from '../core/ioc/container';
-import IFileNode from '../core/interface/io/file/file-node.interface';
-import IDirectoryService from '../core/interface/io/directory/directory-service.interface';
+import Types from '../../core/ioc/types';
+import Container from '../../core/ioc/container';
+import IFileNode from '../../core/interface/io/file/file-node.interface';
+import IDirectoryService from '../../core/interface/io/directory/directory-service.interface';
 
 type State = { selected: { isFocused: boolean } | null };
 
-const directoryService = Container.get<IDirectoryService>(Types.IDirectoryService);
-const state: State = { selected: null };
+let directoryService: IDirectoryService;
 
 const mutations = {
     setSelected(state: State, item: { isFocused: boolean } | null): void {
@@ -36,9 +35,14 @@ const actions = {
     }
 };
 
-export default {
-    namespaced: true,
-    state,
-    mutations,
-    actions
-} as StoreOptions<State>;
+export default () => {
+    directoryService = Container.get<IDirectoryService>(Types.IDirectoryService);
+    const state: State = { selected: null };
+
+    return ({
+        namespaced: true,
+        state,
+        mutations,
+        actions
+    } as StoreOptions<State>);
+};

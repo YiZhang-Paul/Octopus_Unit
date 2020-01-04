@@ -1,7 +1,7 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
+import Vuex, { Store } from 'vuex';
 
-import DirectorySelectionStore from './directory-selection.store';
+import DirectorySelectionStore from './directory-selection-store/directory-selection-store';
 import OpenedFilesStore from './opened-files.store';
 
 Vue.use(Vuex);
@@ -9,9 +9,9 @@ Vue.use(Vuex);
 const directorySelectionStoreName = 'directorySelectionStore';
 const openedFilesStoreName = 'openedFilesStore';
 
-const store = new Vuex.Store<any>({
+const store = new Store<any>({
     modules: {
-        [directorySelectionStoreName]: DirectorySelectionStore,
+        [directorySelectionStoreName]: DirectorySelectionStore(),
         [openedFilesStoreName]: OpenedFilesStore
     }
 });
