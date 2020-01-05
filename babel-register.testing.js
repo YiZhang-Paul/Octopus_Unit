@@ -15,6 +15,7 @@ require('@babel/register')({
         '@babel/preset-typescript',
     ],
     plugins: [
+        '@babel/plugin-proposal-optional-chaining',
         [
             '@babel/plugin-proposal-decorators',
             {

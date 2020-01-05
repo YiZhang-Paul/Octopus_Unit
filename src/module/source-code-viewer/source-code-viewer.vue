@@ -53,12 +53,12 @@ export default Vue.extend({
                 this.selected = this.lastOpenedFile;
             }
         },
-        async onFileSelected(path: string): Promise<void> {
-            await this.setLastOpenedFile(path);
+        onFileSelected(path: string): void {
+            this.setLastOpenedFile(path);
             this.selected = this.lastOpenedFile;
         },
         onFileClose(path: string): void {
-            this.closeFile({ path, isCurrent: path === this.selectedPath });
+            this.closeFile(path);
             this.selected = this.lastOpenedFile;
         },
         ...mapActions({
