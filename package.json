@@ -3,6 +3,7 @@
     "version": "0.0.0",
     "description": "a versatile unit testing utility tool",
     "scripts": {
+        "test": "mochapack --webpack-config webpack/testing.config.js src/**/*.spec.ts",
         "build:dev": "webpack --config webpack/development.config.js --watch",
         "start:dev": "npm run build:dev"
     },
@@ -30,10 +31,10 @@
         "chai": "^4.2.0",
         "css-loader": "^3.4.0",
         "electron": "^7.1.7",
-        "electron-mocha": "^8.1.2",
         "html-webpack-plugin": "^3.2.0",
         "mini-css-extract-plugin": "^0.9.0",
         "mocha": "^6.2.2",
+        "mochapack": "^1.1.13",
         "node-sass": "^4.13.0",
         "nyc": "^15.0.0",
         "sass-loader": "^8.0.0",
@@ -45,7 +46,8 @@
         "webpack": "^4.41.4",
         "webpack-cli": "^3.3.10",
         "webpack-electron-reload": "^1.0.0",
-        "webpack-merge": "^4.2.2"
+        "webpack-merge": "^4.2.2",
+        "webpack-node-externals": "^1.7.2"
     },
     "dependencies": {
         "inversify": "^5.0.1",

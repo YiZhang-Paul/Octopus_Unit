@@ -6,9 +6,9 @@ import ILogger from '../../../interface/io/logger.interface';
 export default class Logger implements ILogger {
 
     public log(a = '', ...b: string[]): void {
-        const environment = process.env.NODE_ENV;
+        const environment = process.env.APP_ENV;
 
-        if (environment !== 'production' && environment !== 'testing') {
+        if (environment === 'development') {
             console.log(a, ...b);
         }
     }

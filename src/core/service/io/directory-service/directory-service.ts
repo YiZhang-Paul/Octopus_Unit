@@ -1,18 +1,17 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import * as pathService from 'path';
 import * as fs from 'fs';
 
 import Types from '../../../ioc/types';
+import Container from '../../../ioc/container';
 import IFileNode from '../../../interface/io/file/file-node.interface';
 import ILogger from '../../../interface/io/logger.interface';
 import IDirectoryService from '../../../interface/io/directory/directory-service.interface';
 
-const { ILogger: ILoggerKey } = Types;
-
 @injectable()
 export default class DirectoryService implements IDirectoryService {
 
-    constructor(@inject(ILoggerKey) private _logger: ILogger) { }
+    private _logger = Container.get<ILogger>(Types.ILogger);
 
     public async listDirectoryFlat(path: string): Promise<string[]> {
         return new Promise((resolve, reject) => {

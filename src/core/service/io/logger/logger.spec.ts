@@ -23,7 +23,7 @@ context('logger unit test', () => {
 
     describe('log', () => {
         it('should log on development mode', () => {
-            process.env.NODE_ENV = 'development';
+            process.env.APP_ENV = 'development';
 
             logger.log('');
 
@@ -31,14 +31,14 @@ context('logger unit test', () => {
         });
 
         it('should not log on production mode', () => {
-            process.env.NODE_ENV = 'production';
+            process.env.APP_ENV = 'production';
 
             logger.log('');
 
             sinonExpect.notCalled(logSpy);
         });
         it('should not log on test mode', () => {
-            process.env.NODE_ENV = 'testing';
+            process.env.APP_ENV = 'testing';
 
             logger.log('');
 
