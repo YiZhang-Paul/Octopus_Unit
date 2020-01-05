@@ -32,7 +32,11 @@ require('@babel/register')({
         [
             'istanbul',
             {
-                exclude: ['**/*.interface.ts', '**/*.spec.ts']
+                exclude: [
+                    '**/*.interface.ts',
+                    '**/*.spec.ts',
+                    '**/store/index.ts'
+                ]
             }
         ]
     ]

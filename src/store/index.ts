@@ -11,8 +11,8 @@ const openedFilesStoreName = 'openedFilesStore';
 
 const store = new Store<any>({
     modules: {
-        [directorySelectionStoreName]: DirectorySelectionStore(),
-        [openedFilesStoreName]: OpenedFilesStore()
+        [directorySelectionStoreName]: DirectorySelectionStore,
+        [openedFilesStoreName]: OpenedFilesStore
     }
 });
 

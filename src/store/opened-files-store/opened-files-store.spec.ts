@@ -9,7 +9,7 @@ import Container from '../../core/ioc/container';
 import IFileContent from '../../core/interface/io/file/file-content.interface';
 import IFileService from '../../core/interface/io/file/file-service.interface';
 
-import OpenedFilesStore from './opened-files-store';
+import { createStore } from './opened-files-store';
 
 createLocalVue().use(Vuex);
 
@@ -30,7 +30,7 @@ context('opened files store unit test', () => {
     });
 
     beforeEach('test setup', () => {
-        store = new Store(OpenedFilesStore());
+        store = new Store(createStore());
     });
 
     afterEach('test teardown', () => {

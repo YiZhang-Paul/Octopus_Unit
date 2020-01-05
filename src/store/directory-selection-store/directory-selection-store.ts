@@ -35,7 +35,7 @@ const actions = {
     }
 };
 
-export default () => {
+export const createStore = () => {
     directoryService = Container.get<IDirectoryService>(Types.IDirectoryService);
     const state: State = { selected: null };
 
@@ -46,3 +46,5 @@ export default () => {
         actions
     } as StoreOptions<State>);
 };
+
+export default createStore();

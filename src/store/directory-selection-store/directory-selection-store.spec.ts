@@ -8,7 +8,7 @@ import Types from '../../core/ioc/types';
 import Container from '../../core/ioc/container';
 import IDirectoryService from '../../core/interface/io/directory/directory-service.interface';
 
-import DirectorySelectionStore from './directory-selection-store';
+import { createStore } from './directory-selection-store';
 
 createLocalVue().use(Vuex);
 
@@ -31,7 +31,7 @@ context('directory selection store unit test', () => {
     });
 
     beforeEach('test setup', () => {
-        store = new Store(DirectorySelectionStore());
+        store = new Store(createStore());
     });
 
     afterEach('test teardown', () => {

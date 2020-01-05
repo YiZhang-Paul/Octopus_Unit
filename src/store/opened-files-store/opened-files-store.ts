@@ -94,7 +94,7 @@ const actions = {
     },
     closeFile(context: ActionContext<State, any>, path: string): void {
         const { getters, dispatch } = context;
-        const opened = getters.openedFiles.opened;
+        const opened: IFileContent[] = getters.openedFiles.opened;
         const isOpened = opened.some(_ => _.path === path);
         const isPreviewed = getters.isPreviewed(path);
 
@@ -119,7 +119,7 @@ const getters = {
     }
 };
 
-export default () => {
+export const createStore = () => {
     fileService = Container.get<IFileService>(Types.IFileService);
     pathLookup = new Set<string>();
 
@@ -137,3 +137,5 @@ export default () => {
         getters
     } as StoreOptions<State>);
 };
+
+export default createStore();
