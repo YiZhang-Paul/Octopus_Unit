@@ -11,6 +11,7 @@
 
     <file-content-reader
         class="reader-container"
+        :location="selected"
         :content="contents.get(selected)"
     />
 </div>

@@ -31,6 +31,7 @@
     "devDependencies": {
         "@types/chai": "^4.2.7",
         "@types/fs-extra": "^8.0.1",
+        "@types/highlight.js": "^9.12.3",
         "@types/mocha": "^5.2.7",
         "@types/node": "^13.1.1",
         "@types/sinon": "^7.5.1",
@@ -58,6 +59,7 @@
         "webpack-node-externals": "^1.7.2"
     },
     "dependencies": {
+        "highlight.js": "^9.17.1",
         "inversify": "^5.0.1",
         "reflect-metadata": "^0.1.13",
         "vue": "^2.6.11",
