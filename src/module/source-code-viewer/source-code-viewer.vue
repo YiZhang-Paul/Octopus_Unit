@@ -46,12 +46,12 @@ export default Vue.extend({
     methods: {
         async onOpenFolder(): Promise<void> {
             const option = { properties: ['openDirectory'] };
-            const { canceled, paths } = await dialog.showOpenDialog(option);
+            const result = await dialog.showOpenDialog(option);
 
-            if (!canceled && paths[0]) {
+            if (!result.canceled && result.filePaths[0]) {
                 this.isDirectoryLoading = true;
-                this.base = paths[0];
-                this.directory = await this.loadItems(paths[0]);
+                this.base = result.filePaths[0];
+                this.directory = await this.loadItems(this.base);
                 this.isDirectoryLoading = false;
             }
         },
