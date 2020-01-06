@@ -3,7 +3,9 @@
     "version": "0.0.0",
     "description": "a versatile unit testing utility tool",
     "nyc": {
-        "include": ["src/**/*.ts"],
+        "include": [
+            "src/**/*.ts"
+        ],
         "instrument": false,
         "sourceMap": false
     },
@@ -28,7 +30,6 @@
     "homepage": "https://github.com/YiZhang-Paul/Octopus_Unit#readme",
     "devDependencies": {
         "@types/chai": "^4.2.7",
-        "@types/electron": "^1.6.10",
         "@types/fs-extra": "^8.0.1",
         "@types/mocha": "^5.2.7",
         "@types/node": "^13.1.1",

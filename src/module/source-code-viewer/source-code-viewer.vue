@@ -3,8 +3,10 @@
     <directory-viewer
         class="directory-viewer-container"
         :base="base"
+        :isLoading="isDirectoryLoading"
         :directory="directory"
         @selected="onDirectoryItemSelected"
+        @open-folder="onOpenFolder"
     />
 
     <div class="file-viewer-placeholder" v-if="!openedFiles"></div>
@@ -23,6 +25,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
+const { dialog } = require('electron').remote;
 
 import Store from '../../store';
 import IDirectorySelection from '../../core/interface/io/directory/directory-selection.interface';
@@ -31,18 +34,27 @@ import FileViewer from '../../module/source-code-viewer/file-viewer/file-viewer.
 
 export default Vue.extend({
     data: () => ({
-        base: 'd:/electron',
+        base: '',
         directory: [],
-        selected: null
+        selected: null,
+        isDirectoryLoading: false
     }),
     components: {
         DirectoryViewer,
         FileViewer
     },
-    async beforeMount(): Promise<void> {
-        this.directory = await this.loadItems(this.base);
-    },
     methods: {
+        async onOpenFolder(): Promise<void> {
+            const option = { properties: ['openDirectory'] };
+            const { canceled, paths } = await dialog.showOpenDialog(option);
+
+            if (!canceled && paths[0]) {
+                this.isDirectoryLoading = true;
+                this.base = paths[0];
+                this.directory = await this.loadItems(paths[0]);
+                this.isDirectoryLoading = false;
+            }
+        },
         async onDirectoryItemSelected(selection: IDirectorySelection): Promise<void> {
             const { source, path, isPreview, isDirectory } = selection;
             this.selectDirectoryItem(source);
